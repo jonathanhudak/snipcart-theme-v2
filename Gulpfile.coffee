@@ -12,6 +12,7 @@ argv = require('yargs').option('snipcartVersion', {type: 'string'}).argv
 
 themesDir = 'themes'
 workingDir = 'themes/base'
+outputDir = 'build'
 
 sources =
   sass: "#{workingDir}/sass/snipcart.scss"
@@ -35,17 +36,22 @@ gulp.task 'sass', ->
     .pipe autoprefixer(cascade: false, browsers: ['> 0.25%'])
     .pipe gulp.dest(workingDir)
 
+
 gulp.task 'min', ['sass'], ->
-   gulp.src sources.compiled
+  gulp.src sources.sass
+    .pipe(sass().on('error', sass.logError))
+    .pipe autoprefixer(cascade: false, browsers: ['> 0.25%'])
+    .pipe gulp.dest(outputDir)
+  gulp.src sources.compiled
     .pipe(postcss([mqpacker]))
     .pipe(minifyCss())
     .pipe(rename({suffix: '.min'}))
-    .pipe(gulp.dest(workingDir))
+    .pipe(gulp.dest(outputDir))
 
   gulp.src(sources.compiled)
     .pipe(minifyCss())
     .pipe(rename({suffix: '.min'}))
-    .pipe(gulp.dest(workingDir))
+    .pipe(gulp.dest(outputDir))
 
 gulp.task 'watch', ->
   gulp.watch [watch.sass], ['sass']
@@ -56,6 +62,7 @@ gulp.task 'sync', ['dev'], ->
   sync.init
     port: 3006
     proxy: proxy
+    open: false
     serveStatic: ['.']
     ui:
         port: 3007

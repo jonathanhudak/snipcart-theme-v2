@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "gulp sync"
+    "start": "gulp sync --proxy http://localhost:3000/",
+    "build": "gulp min",
+    "post:build": "aws s3 sync ./build s3://daily-joy-health/snipcart-theme --profile daily-joy --acl public-read"
   },
   "repository": {
     "type": "git",

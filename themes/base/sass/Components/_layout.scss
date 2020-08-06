@@ -28,8 +28,9 @@ $_layout-content-border: 1px solid palette(layout, content-border);
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
 
   @media #{$mq-large} {
-    min-height: 100vh;
     padding: 2em;
+    top: 50%;
+    transform: translateY(-50%);
   }
 }
 
